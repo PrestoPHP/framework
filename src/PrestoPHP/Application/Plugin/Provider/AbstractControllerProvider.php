@@ -58,12 +58,42 @@ abstract class AbstractControllerProvider implements ControllerProviderInterface
                 case 'get':
                     $this->application->get('/', [$controller, $action]);
                     break;
+                case 'post':
+                    $this->application->post('/', [$controller, $action]);
+                    break;
+                case 'put':
+                    $this->application->put('/', [$controller, $action]);
+                    break;
+                case 'delete':
+                    $this->application->delete('/', [$controller, $action]);
+                    break;
+                case 'options':
+                    $this->application->options('/', [$controller, $action]);
+                    break;
+                case 'patch':
+                    $this->application->patch('/', [$controller, $action]);
+                    break;
             }
         } else throw new \Exception("Controller not found");
     }
 
     protected function createGetController($path, $class, $action) {
         $this->createController($path, $class, $action, 'get');
+    }
+    protected function createPostController($path, $class, $action) {
+        $this->createController($path, $class, $action, 'post');
+    }
+    protected function createPutController($path, $class, $action) {
+        $this->createController($path, $class, $action, 'put');
+    }
+    protected function createDeleteController($path, $class, $action) {
+        $this->createController($path, $class, $action, 'delete');
+    }
+    protected function createOptionsController($path, $class, $action) {
+        $this->createController($path, $class, $action, 'options');
+    }
+    protected function createPatchController($path, $class, $action) {
+        $this->createController($path, $class, $action, 'patch');
     }
 
 }

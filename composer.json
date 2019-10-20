@@ -13,7 +13,8 @@
     "require": {
         "php": ">=7.1.3",
         "prestophp/prestophp": "^2.3.1",
-        "twig/twig": "^2.0"
+        "twig/twig": "^2.0",
+        "symfony/finder": "^4.3"
     },
     "require-dev": {
         "monolog/monolog": "^1.4.1",
@@ -22,7 +23,7 @@
     "autoload": {
         "psr-4": {
             "PrestoPHP\\Framework\\": "src/PrestoPHP",
-            "PrestoTest\\": "test"
+            "PrestoTest\\": "test/src"
         }
     },
     "autoload-dev" : {

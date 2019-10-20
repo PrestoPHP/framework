@@ -10,6 +10,7 @@
 namespace PrestoPHP\Framework\Application\Controller;
 
 use PrestoPHP\Framework\Application;
+use PrestoPHP\Framework\Application\Kernel\ClassResolver\Factory\FactoryResolver;
 
 abstract class AbstractController {
     protected $application;
@@ -39,10 +40,27 @@ abstract class AbstractController {
         $this->application = $application;
     }
 
-    public function assign(array $data = []) {
+    protected function assign(array $data = [])
+    {
         return $data;
     }
 
+    protected function getFactory() {
+        if($this->factory === null) $this->factory = $this->resolveFactory();
+        $this->factory->setApplication($this->application);
+
+        return $this->factory;
+    }
+
+    private function resolveFactory()
+    {
+        return $this->getFactoryResolver()->resolve($this);
+    }
+
+    private function getFactoryResolver()
+    {
+        return new FactoryResolver();
+    }
 
 
 }
