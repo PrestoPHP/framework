@@ -31,11 +31,16 @@ class TwigServiceProvider extends PrestoPHPTwigServiceProvider implements Bootab
 
     public function onKernelView(GetResponseForControllerResultEvent $event) {
         $response = $event->getControllerResult();
-
         if(is_array($response) || empty($response)) {
             $response = $this->render((array) $response);
-
-            if($response instanceof Response) $event->setResponse($response);
+            if(!$response instanceof Response) {
+                $response = new Response(
+                    $response,
+                    Response::HTTP_OK,
+                    ['content-type' => 'text/html']
+                );
+            }
+            $event->setResponse($response);
         }
 
     }
@@ -70,6 +75,4 @@ class TwigServiceProvider extends PrestoPHPTwigServiceProvider implements Bootab
     protected function filter($string, $separator = '-') {
         return strtolower(preg_replace('/([a-z])([A-Z])/', '$1' . addcslashes($separator, '$') . '$2', $string));
     }
-
-
 }
