@@ -49,28 +49,20 @@ class TwigServiceProvider extends PrestoPHPTwigServiceProvider implements Bootab
 
         if($route === null) return null;
 
-        return $this->app->render($route .'.twig', $params);
+        return $this->app['twig']->render($route .'.twig', $params);
     }
 
     protected function getRouteFromRequest() {
         $request = $this->app['request_stack']->getCurrentRequest();
         $controller = $request->attributes->get("_controller");
-
         if(empty($controller)) return null;
+        $className = get_class($controller[0]);
+        $action = $controller[1];
 
-        if(strpos($controller, ':') !== false) {
-            list($service, $action) = explode(':', $controller);
-            $controllerNameSpace = get_class($this->app[$service]);
-        } else if(strpos($controller, '::') !== false) {
-            list($controllerNameSpace, $action) = explode('::', $controller);
-        } else {
-            throw new \LogicException("Cannot parse Route from Request");
-        }
+        list($application, $namespace, $module, $bundle, $layer, $controllerName) = explode('\\', $className);
 
-        list($application, $namespace, $module, $bundle, $layer, $controllerName) = explode('\\', $controllerNameSpace);
-
+        if(empty($controllerName) || empty($action)) throw new \LogicException("Cannot parse Route from Request");
         $controller = $this->filter(str_replace('Controller', '', $controllerName));
-        $action = $this->filter(str_replace('Action', '', $action));
 
         return $bundle.'/'.$controller.'/'.$action;
     }
