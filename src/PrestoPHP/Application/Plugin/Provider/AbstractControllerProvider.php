@@ -51,7 +51,8 @@ abstract class AbstractControllerProvider implements ControllerProviderInterface
     }
 
     protected function createController($path, $class, $action, $type) {
-        if(class_exists($class)) {
+        if(class_exists($class))
+        {
             $controller = new $class;
             $controller->setApplication($this->application);
             switch ($type) {
