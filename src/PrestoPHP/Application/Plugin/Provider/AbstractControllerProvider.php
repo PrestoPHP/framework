@@ -57,22 +57,22 @@ abstract class AbstractControllerProvider implements ControllerProviderInterface
             $controller->setApplication($this->application);
             switch ($type) {
                 case 'get':
-                    $this->application->get('/', [$controller, $action]);
+                    $this->application->get($path, [$controller, $action]);
                     break;
                 case 'post':
-                    $this->application->post('/', [$controller, $action]);
+                    $this->application->post($path, [$controller, $action]);
                     break;
                 case 'put':
-                    $this->application->put('/', [$controller, $action]);
+                    $this->application->put($path, [$controller, $action]);
                     break;
                 case 'delete':
-                    $this->application->delete('/', [$controller, $action]);
+                    $this->application->delete($path, [$controller, $action]);
                     break;
                 case 'options':
-                    $this->application->options('/', [$controller, $action]);
+                    $this->application->options($path, [$controller, $action]);
                     break;
                 case 'patch':
-                    $this->application->patch('/', [$controller, $action]);
+                    $this->application->patch($path, [$controller, $action]);
                     break;
             }
         } else throw new \Exception("Controller not found");
