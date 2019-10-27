@@ -50,7 +50,7 @@ abstract class AbstractControllerProvider implements ControllerProviderInterface
         return $this->controllerCollection;
     }
 
-    protected function createController($path, $class, $action, $type) {
+    protected function createInternalController($path, $class, $action, $type) {
         if(class_exists($class))
         {
             $controller = new $class;
@@ -74,27 +74,33 @@ abstract class AbstractControllerProvider implements ControllerProviderInterface
                 case 'patch':
                     $this->application->patch($path, [$controller, $action]);
                     break;
+                case 'match':
+                    $this->application->match($path, [$controller, $action]);
+                    break;
             }
         } else throw new \Exception("Controller not found");
     }
 
     protected function createGetController($path, $class, $action) {
-        $this->createController($path, $class, $action, 'get');
+        $this->createInternalController($path, $class, $action, 'get');
     }
     protected function createPostController($path, $class, $action) {
-        $this->createController($path, $class, $action, 'post');
+        $this->createInternalController($path, $class, $action, 'post');
     }
     protected function createPutController($path, $class, $action) {
-        $this->createController($path, $class, $action, 'put');
+        $this->createInternalController($path, $class, $action, 'put');
     }
     protected function createDeleteController($path, $class, $action) {
-        $this->createController($path, $class, $action, 'delete');
+        $this->createInternalController($path, $class, $action, 'delete');
     }
     protected function createOptionsController($path, $class, $action) {
-        $this->createController($path, $class, $action, 'options');
+        $this->createInternalController($path, $class, $action, 'options');
     }
     protected function createPatchController($path, $class, $action) {
-        $this->createController($path, $class, $action, 'patch');
+        $this->createInternalController($path, $class, $action, 'patch');
+    }
+    protected function createController($path, $class, $action) {
+        $this->createInternalController($path, $class, $action, 'match');
     }
 
 }
