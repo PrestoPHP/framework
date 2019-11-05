@@ -1,0 +1,42 @@
+#!/usr/bin/env php
+<?php
+/*
+ * This file is part of the PrestoPHP framework.
+ *
+ * (c) Gunnar Beushausen <gunnar@prestophp.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+use PrestoPHP\Framework\CLI\Application;
+use Symfony\Component\Finder\Finder;
+
+if (!class_exists("\Symfony\Component\Console\Application")) {
+	if(file_exists($file = __DIR__."/vendor/autoload.php")) {
+		require_once $file;
+	}
+}
+
+// Fix for Windows (Windows uses 'Path' instead of 'PATH'
+if (!isset($_SERVER['PATH']) && isset($_SERVER['Path'])) {
+	$_SERVER['PATH'] = $_SERVER['Path'];
+}
+
+$finder = new Finder();
+$finder->files()->name("*.php")->in(__DIR__."/src/PrestoPHP/CLI/Command")->depth(0);
+
+$app = new Application('PrestoPHP');
+
+$ns = "\\PrestoPHP\\Framework\\CLI\\Command\\";
+
+foreach ($finder as $file) {
+	$r =  new \ReflectionClass($ns.$file->getBasename(".php"));
+	if ($r->isSubclassOf("Symfony\\Component\\Console\\Command\\Command") && !$r->isAbstract()) {
+		$app->add($r->newInstance());
+	}
+}
+
+$app->setDefaultCommand('about');
+
+$app->run();
