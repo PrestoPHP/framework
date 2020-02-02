@@ -19,4 +19,15 @@ class Application extends BaseApplication
     {
         return self::VERSION;
     }
+
+	/**
+	 * @param $type
+	 * @param null $data
+	 * @param array $options
+	 * @return FormBuilderInterface
+	 */
+	public function buildForm($type = FormType::class, $data = null, $options = []) {
+		return $this['form.factory']->createBuilder($type, $data, $options);
+	}
+
 }
