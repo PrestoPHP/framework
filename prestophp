@@ -11,6 +11,8 @@
 
 use PrestoPHP\Framework\CLI\Application;
 use PrestoPHP\Framework\CLI\Command\AboutCommand;
+use PrestoPHP\Framework\CLI\Command\GenerateCommand;
+use PrestoPHP\Framework\CLI\Command\NewCommand;
 
 require file_exists(__DIR__.'/vendor/autoload.php')
 	? __DIR__.'/vendor/autoload.php'
@@ -20,9 +22,13 @@ require file_exists(__DIR__.'/vendor/autoload.php')
 if (!isset($_SERVER['PATH']) && isset($_SERVER['Path'])) {
 	$_SERVER['PATH'] = $_SERVER['Path'];
 }
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 $app = new Application('PrestoPHP');
 $app->add(new AboutCommand());
+$app->add(new GenerateCommand());
+$app->add(new NewCommand());
 
 $app->setDefaultCommand('about');
 

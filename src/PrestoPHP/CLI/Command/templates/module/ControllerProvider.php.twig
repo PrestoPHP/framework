@@ -1,0 +1,12 @@
+<?php
+
+namespace {{ namespace }}Code\{{ name|capitalize }}\Plugin\Provider;
+use {{ namespace }}Code\{{ module|capitalize }}\Index\Controller\IndexController;
+use PrestoPHP\Framework\Application\Plugin\Provider\AbstractControllerProvider;
+use PrestoPHP\Application;
+
+class {{ name|capitalize }}ControllerProvider extends AbstractControllerProvider {
+	protected function setupControllers(Application $app) {
+		    $this->createGetController("/{{ name | lower }}", IndexController::class, "index");
+    }
+}
