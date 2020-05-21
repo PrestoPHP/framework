@@ -18,61 +18,63 @@ use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class TwigServiceProvider extends PrestoPHPTwigServiceProvider implements BootableProviderInterface {
-    protected $app;
+	protected $app;
 
-    public function __construct() 	{
+	public function __construct() 	{
 
-    }
+	}
 
-    public function register(Container $app) {
-        $this->app = $app;
-        parent::register($app);
-    }
+	public function register(Container $app) {
+		$this->app = $app;
+		parent::register($app);
+	}
 
-    public function onKernelView(GetResponseForControllerResultEvent $event) {
-        $response = $event->getControllerResult();
-        if(is_array($response) || empty($response)) {
-            $response = $this->render((array) $response);
-            if(!$response instanceof Response) {
-                $response = new Response(
-                    $response,
-                    Response::HTTP_OK,
-                    ['content-type' => 'text/html']
-                );
-            }
-            $event->setResponse($response);
-        }
+	public function onKernelView(GetResponseForControllerResultEvent $event) {
+		$response = $event->getControllerResult();
+		if(is_array($response) || empty($response)) {
+			$response = $this->render((array) $response);
+			if(!$response instanceof Response) {
+				$response = new Response(
+					$response,
+					Response::HTTP_OK,
+					['content-type' => 'text/html']
+				);
+			}
+			$event->setResponse($response);
+		}
 
-    }
+	}
 
-    public function boot(Application $app) {
-        $app['dispatcher']->addListener(KernelEvents::VIEW, [$this, 'onKernelView'], 0);
-    }
+	public function boot(Application $app) {
+		$app['dispatcher']->addListener(KernelEvents::VIEW, [$this, 'onKernelView'], 0);
+	}
 
-    protected function render(array $params = []) {
-        $route = $this->getRouteFromRequest();
+	protected function render(array $params = []) {
+		$template = (array_key_exists("template", $params)) ? $params['template'] : null;
+		$route = $this->getRouteFromRequest($template);
 
-        if($route === null) return null;
+		if($route === null) return null;
 
-        return $this->app['twig']->render($route .'.twig', $params);
-    }
+		return $this->app['twig']->render($route .'.twig', $params);
+	}
 
-    protected function getRouteFromRequest() {
-        $request = $this->app['request_stack']->getCurrentRequest();
-        $controller = $request->attributes->get("_controller");
-        if(empty($controller)) return null;
-        $className = get_class($controller[0]);
-        $action = $controller[1];
+	protected function getRouteFromRequest($template = null) {
+		$request = $this->app['request_stack']->getCurrentRequest();
+		$controller = $request->attributes->get("_controller");
 
-        list($application, $namespace, $module, $bundle, $layer, $controllerName) = explode('\\', $className);
+		if(empty($controller)) return null;
+		$className = get_class($controller[0]);
+		$action = ($template !== null) ? $template : $controller[1];
 
-        if(empty($controllerName) || empty($action)) throw new \LogicException("Cannot parse Route from Request");
-        $controller = $this->filter(str_replace('Controller', '', $controllerName));
+		list($application, $namespace, $module, $bundle, $layer, $controllerName) = explode('\\', $className);
 
-        return $bundle.'/'.$controller.'/'.$action;
-    }
+		if(empty($controllerName) || empty($action)) throw new \LogicException("Cannot parse Route from Request");
+		$controller = $this->filter(str_replace('Controller', '', $controllerName));
 
-    protected function filter($string, $separator = '-') {
-        return strtolower(preg_replace('/([a-z])([A-Z])/', '$1' . addcslashes($separator, '$') . '$2', $string));
-    }
+		return $bundle.'/'.$controller.'/'.$action;
+	}
+
+	protected function filter($string, $separator = '-') {
+		return strtolower(preg_replace('/([a-z])([A-Z])/', '$1' . addcslashes($separator, '$') . '$2', $string));
+	}
 }
