@@ -15,7 +15,6 @@
         "ext-json": "*",
         "prestophp/prestophp": "^2.3.1",
         "twig/twig": "^2.0",
-        "guzzlehttp/guzzle": "^5.3.1",
         "gbeushausen/distill": "@stable",
         "symfony/form": "^4.3",
         "symfony/validator": "^4.3",
@@ -24,7 +23,8 @@
         "symfony/finder": "^4.3",
         "symfony/twig-bridge": "^4.3",
         "symfony/console": "^4.3",
-        "symfony/filesystem": "^4.3"
+        "symfony/filesystem": "^4.3",
+        "guzzlehttp/guzzle": "^5.3.1"
     },
     "require-dev": {
         "monolog/monolog": "^1.4.1",
