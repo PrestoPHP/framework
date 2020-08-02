@@ -15,7 +15,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\Request;
 
-abstract class CrudController extends AbstractController {
+class CrudController extends AbstractController {
 	protected $routes = [];
 	protected $blacklist = [];
 	protected $model;
@@ -207,7 +207,73 @@ abstract class CrudController extends AbstractController {
 		file_put_contents(APPLICATION_DIR."/src/views/".$this->modelName."/".strtolower($this->modelName)."/form.twig", $output);
 	}
 
-	abstract function index(Request $request);
-	abstract function view(Request $request);
-	abstract function edit(Request $request);
+	protected function buildFormTemplate($rows = 1) {
+		$form = $this->buildForm(null, $this->blacklist);
+		$this->generateFormTemplate($form, $rows);
+	}
+
+
+	public function index(Request $request) {
+		$this->getData();
+
+		return $this->assign([
+			"viewData" => $this->viewData
+		]);
+	}
+
+	public function add(Request $request) {
+		$form = $this->buildForm(null, $this->blacklist);
+
+		return $this->assign([
+			"template" => "edit",
+			"form" => $form->createView()
+		]);
+	}
+
+	public function view(Request $request) {
+		$result = $this->modelQuery->findOneById($request->get("id"));
+		if ($result === null) return $this->application->abort(404);
+		$result = $result->toArray();
+		unset($result["Password"]);
+
+		return $this->assign([
+			"viewData" => $result
+		]);
+	}
+
+	public function edit(Request $request) {
+		$result = $this->modelQuery->findOneById($request->get("id"));
+		if ($result === null) return $this->application->abort(404);
+		$result = $this->sanitizeData($result->toArray());
+		$form = $this->buildForm($result, $this->blacklist);
+
+		return $this->assign(["form" => $form->createView()]);
+	}
+
+	public function doEdit(Request $request) {
+		$form = $this->buildForm();
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid()) {
+			$data = $form->getData();
+			if($data['Id'] === null) {
+				$result = new $this->model();
+			} else {
+				$result = $this->modelQuery->findOneById($data['Id']);
+				if ($result === null) return $this->application->abort(404);
+			}
+			$result->fromArray($form->getData());
+			$result->save();
+		}
+
+		return $this->application->redirect("/{$this->getClassName()}");
+	}
+
+	public function delete(Request $request) {
+		$result = $this->modelQuery->findOneById($request->get("id"));
+		if ($result === null) return $this->application->abort(404);
+		$result->delete();
+
+		return $this->application->redirect("/{$this->getClassName()}");
+	}
 }
