@@ -98,10 +98,10 @@ abstract class CrudController extends AbstractController {
 		}
 	}
 
-	protected function buildForm($options = null) : Form {
+	protected function buildForm($options = null, $blacklist = []) : Form {
 		$form = $this->application->buildForm(FormType::class, $options);
 		$form->setAction("/{$this->getClassName()}/edit");
-		$form = $this->buildFormFromDatabase($form);
+		$form = $this->buildFormFromDatabase($form, $blacklist);
 		$form->add('save', SubmitType::class, ['label' => 'Speichern']);
 		$form = $form->getForm();
 
