@@ -23,6 +23,7 @@ class CrudController extends AbstractController {
 	protected $modelQuery;
 	protected $viewData;
 	protected $tableMap;
+	protected $tableKeys;
 
 
 	public function __construct(Application $app = null) {
@@ -49,6 +50,7 @@ class CrudController extends AbstractController {
 			["path" => "/{$this->getClassName()}/delete/{id}", "action" => "delete", "method" => "POST"],
 		];
 		$this->getData();
+		$this->getTableKeys($this->blacklist);
 	}
 
 	public function getRoutes() {
@@ -106,6 +108,14 @@ class CrudController extends AbstractController {
 		$form = $form->getForm();
 
 		return $form;
+	}
+
+	protected function getTableKeys($blacklist=[]) {
+		foreach ($this->tableMap->getColumns() as $key) {
+			if(!in_array($key->getPhpName(), $blacklist)) {
+				$this->tableKeys[] = $key->getPhpName();
+			}
+		}
 	}
 
 	protected function buildFormFromDatabase(FormBuilder $form, $blacklist=[]): FormBuilder {
@@ -276,4 +286,5 @@ class CrudController extends AbstractController {
 
 		return $this->application->redirect("/{$this->getClassName()}");
 	}
+
 }
