@@ -227,7 +227,8 @@ class CrudController extends AbstractController {
 		$this->getData();
 
 		return $this->assign([
-			"viewData" => $this->viewData
+			"viewData" => $this->viewData,
+			"tableKeys" => $this->tableKeys
 		]);
 	}
 
