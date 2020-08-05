@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,12 +25,13 @@ class CrudController extends AbstractController {
 	protected $viewData;
 	protected $tableMap;
 	protected $tableKeys;
-
+	protected $title;
 
 	public function __construct(Application $app = null) {
 		parent::__construct($app);
 		$class= new \ReflectionClass($this);
 		$name = substr($class->getShortName(), 0, strpos($class->getShortName(), "Controller"));
+		$this->title = $name;
 		$this->modelName = $name;
 		$className = "\Model\\$name";
 		$classNameQry = "\Model\\{$name}Query";
@@ -51,6 +53,7 @@ class CrudController extends AbstractController {
 		];
 		$this->getData();
 		$this->getTableKeys($this->blacklist);
+		$this->init();
 	}
 
 	public function getRoutes() {
@@ -142,6 +145,9 @@ class CrudController extends AbstractController {
 							} else $form->add($key->getPhpName(), IntegerType::class, ["required" => $notNull]);
 						}
 						break;
+					case "LONGVARCHAR":
+						$form->add($key->getPhpName(), TextareaType::class, ["required" => $notNull]);
+						break;
 					case "TIMESTAMP":
 						$form->add($key->getPhpName(), DateTimeType::class, ["required" => $notNull]);
 						break;
@@ -228,7 +234,8 @@ class CrudController extends AbstractController {
 
 		return $this->assign([
 			"viewData" => $this->viewData,
-			"tableKeys" => $this->tableKeys
+			"tableKeys" => $this->tableKeys,
+			"title" => $this->title
 		]);
 	}
 
@@ -237,7 +244,8 @@ class CrudController extends AbstractController {
 
 		return $this->assign([
 			"template" => "edit",
-			"form" => $form->createView()
+			"form" => $form->createView(),
+			"title" => $this->title
 		]);
 	}
 
@@ -248,7 +256,8 @@ class CrudController extends AbstractController {
 		unset($result["Password"]);
 
 		return $this->assign([
-			"viewData" => $result
+			"viewData" => $result,
+			"title" => $this->title
 		]);
 	}
 
@@ -258,7 +267,10 @@ class CrudController extends AbstractController {
 		$result = $this->sanitizeData($result->toArray());
 		$form = $this->buildForm($result, $this->blacklist);
 
-		return $this->assign(["form" => $form->createView()]);
+		return $this->assign([
+			"form" => $form->createView(),
+			"title" => $this->title
+		]);
 	}
 
 	public function doEdit(Request $request) {
