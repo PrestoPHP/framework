@@ -46,6 +46,7 @@ class CrudController extends AbstractController {
 		$this->routes = [
 			["path" => "/{$this->getClassName()}/", "action" => "index", "method" => "GET"],
 			["path" => "/{$this->getClassName()}/add", "action" => "add", "method" => "GET"],
+			["path" => "/{$this->getClassName()}/ajax", "action" => "ajax", "method" => "GET"],
 			["path" => "/{$this->getClassName()}/{id}", "action" => "view", "method" => "GET"],
 			["path" => "/{$this->getClassName()}/edit/{id}", "action" => "edit", "method" => "GET"],
 			["path" => "/{$this->getClassName()}/edit", "action" => "doEdit", "method" => "POST"],
@@ -299,5 +300,17 @@ class CrudController extends AbstractController {
 
 		return $this->application->redirect("/{$this->getClassName()}");
 	}
+
+	public function ajax(Request $request) {
+		$this->getData();
+		$result = [
+			"data" => $this->viewData,
+			"recordsTotal" => count($this->viewData),
+			"recordsFiltered" => count($this->viewData),
+		];
+
+		return $this->application->json($result);
+	}
+
 
 }
