@@ -130,7 +130,7 @@ class CrudController extends AbstractController {
 					case "BIGINT":
 						if (strtolower($key->getPhpName()) == "id") $form->add($key->getPhpName(), HiddenType::class);
 						else {
-							$relatedTable = ucfirst($key->getRelatedTableName());
+							$relatedTable = ucwords(str_replace('_', '', $key->getRelatedTableName()));
 							if ($relatedTable != "") {
 								$relatedModelName = "\Model\\{$relatedTable}Query";
 								$query = new $relatedModelName();
@@ -311,6 +311,5 @@ class CrudController extends AbstractController {
 
 		return $this->application->json($result);
 	}
-
 
 }
