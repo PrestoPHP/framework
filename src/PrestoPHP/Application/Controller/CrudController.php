@@ -52,9 +52,8 @@ class CrudController extends AbstractController {
 			["path" => "/{$this->getClassName()}/edit", "action" => "doEdit", "method" => "POST"],
 			["path" => "/{$this->getClassName()}/delete/{id}", "action" => "delete", "method" => "POST"],
 		];
-		$this->getData();
-		$this->getTableKeys($this->blacklist);
 		$this->init();
+		$this->getTableKeys($this->blacklist);
 	}
 
 	public function getRoutes() {
@@ -99,7 +98,7 @@ class CrudController extends AbstractController {
 
 	protected function addRelations(array $relations) {
 		foreach ($relations as $relation) {
-			$funcName = "joinWith$relation";
+			$funcName = "leftJoin$relation";
 			$this->modelQuery->$funcName();
 		}
 	}
