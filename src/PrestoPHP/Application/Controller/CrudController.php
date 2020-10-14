@@ -96,9 +96,9 @@ class CrudController extends AbstractController {
 		}
 	}
 
-	protected function addRelations(array $relations) {
+	protected function addRelations(array $relations, $with=false) {
 		foreach ($relations as $relation) {
-			$funcName = "leftJoin$relation";
+			($with === true) ? $funcName = "leftJoinWith$relation" : $funcName = "leftJoin$relation";
 			$this->modelQuery->$funcName();
 		}
 	}
@@ -114,6 +114,7 @@ class CrudController extends AbstractController {
 	}
 
 	protected function getTableKeys($blacklist=[]) {
+		unset($this->tableKeys);
 		foreach ($this->tableMap->getColumns() as $key) {
 			if(!in_array($key->getPhpName(), $blacklist)) {
 				$this->tableKeys[] = $key->getPhpName();
