@@ -105,7 +105,11 @@ class CrudController extends AbstractController {
 
 	protected function buildForm($options = null, $blacklist = []) : Form {
 		$form = $this->application->buildForm(FormType::class, $options);
-		$form->setAction("/{$this->getClassName()}/edit");
+		try {
+			$form->setAction("{$this->application['crudPrefix']}/{$this->getClassName()}/edit");
+		} catch (\Exception $e) {
+			$form->setAction("/{$this->getClassName()}/edit");
+		}
 		$form = $this->buildFormFromDatabase($form, $blacklist);
 		$form->add('save', SubmitType::class, ['label' => 'Speichern']);
 		$form = $form->getForm();
@@ -290,7 +294,7 @@ class CrudController extends AbstractController {
 			$result->save();
 		}
 
-		return $this->application->redirect("/{$this->getClassName()}");
+		return $this->application->redirect("{$this->application['crudPrefix']}/{$this->getClassName()}");
 	}
 
 	public function delete(Request $request) {
@@ -298,7 +302,7 @@ class CrudController extends AbstractController {
 		if ($result === null) return $this->application->abort(404);
 		$result->delete();
 
-		return $this->application->redirect("/{$this->getClassName()}");
+		return $this->application->redirect("{$this->application['crudPrefix']}/{$this->getClassName()}");
 	}
 
 	public function ajax(Request $request) {
