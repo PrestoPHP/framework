@@ -12,7 +12,8 @@ namespace PrestoPHP\Framework\Application\Kernel\ClassResolver\Factory;
 
 use PrestoPHP\Framework\Application\Kernel\ClassResolver\AbstractClassResolver;
 
-abstract class AbstractFactoryResolver extends AbstractClassResolver {
+abstract class AbstractFactoryResolver extends AbstractClassResolver
+{
 
     public function resolve($callerClass)
     {
@@ -51,6 +52,5 @@ abstract class AbstractFactoryResolver extends AbstractClassResolver {
             '%bundle%',
             '%factory%'
         );
-
     }
 }

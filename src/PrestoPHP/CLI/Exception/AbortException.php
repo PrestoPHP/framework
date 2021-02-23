@@ -9,4 +9,6 @@
  */
 namespace PrestoPHP\Framework\CLI\Exception;
 
-class AbortException extends \RuntimeException {}
+class AbortException extends \RuntimeException
+{
+}

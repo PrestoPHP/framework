@@ -14,14 +14,17 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-abstract class AbstractCommand extends Command {
-	protected $fs;
+abstract class AbstractCommand extends Command
+{
+    protected $fs;
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
-		$this->fs = new Filesystem();
-	}
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        $this->fs = new Filesystem();
+    }
 
-	protected function configure() {
+    protected function configure()
+    {
 
-	}
+    }
 }

@@ -12,7 +12,8 @@ namespace PrestoPHP\Framework\Application\Kernel\ClassResolver;
 
 use Symfony\Component\Finder\Finder;
 
-abstract class AbstractClassResolver {
+abstract class AbstractClassResolver
+{
     protected $resolvedClassName;
     protected $callerClassName;
     protected $callerClassParts;
@@ -32,13 +33,13 @@ abstract class AbstractClassResolver {
         return new $this->resolvedClassName();
     }
 
-    public function isResolvable() {
+    public function isResolvable()
+    {
         $classNames = $this->generateClassNames();
 
         foreach ($classNames as $className)
         {
-            if(class_exists($className))
-            {
+            if(class_exists($className)) {
                 $this->resolvedClassName = $className;
 
                 return true;
@@ -59,8 +60,7 @@ abstract class AbstractClassResolver {
 
     protected function setCallerClass($callerClass)
     {
-        if (is_object($callerClass))
-        {
+        if (is_object($callerClass)) {
             $callerClass = get_class($callerClass);
         }
 
@@ -70,8 +70,7 @@ abstract class AbstractClassResolver {
             self::KEY_BUNDLE => $callerClass
         ];
 
-        if($this->isFQClassName($callerClass))
-        {
+        if($this->isFQClassName($callerClass)) {
             $callerClassParts = explode('\\', $callerClass);
         }
 
@@ -83,7 +82,8 @@ abstract class AbstractClassResolver {
         return (strpos($className, "\\") !== false);
     }
 
-    protected function generateClassNames() {
+    protected function generateClassNames()
+    {
         $result = [];
         foreach ($this->getNamespaces() as $namespace) {
             $result[] = $this->generateClassName($namespace);
@@ -92,7 +92,8 @@ abstract class AbstractClassResolver {
         return $result;
     }
 
-    protected function getNamespaces() {
+    protected function getNamespaces()
+    {
         defined('SRC_DIR') || define('SRC_DIR', '/src');
         $namespaces = [];
         $finder = new Finder();

@@ -13,22 +13,26 @@ use PrestoPHP\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class AboutCommand extends AbstractCommand {
-	private $appVersion;
+class AboutCommand extends AbstractCommand
+{
+    private $appVersion;
 
-	public function __construct() {
-		parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-		$this->appVersion = Application::VERSION;
-	}
+        $this->appVersion = Application::VERSION;
+    }
 
-	protected function configure() {
-		$this->setName("about")
-			->setDescription("PrestoPHP CLI help");
-	}
+    protected function configure()
+    {
+        $this->setName("about")
+            ->setDescription("PrestoPHP CLI help");
+    }
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
-		$commandHelp = <<<COMMAND_HELP
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $commandHelp = <<<COMMAND_HELP
 PrestoPHP CLI %s
 %s
 
@@ -41,7 +45,7 @@ the <info>latest stable version</info>, execute the following command:
 
 COMMAND_HELP;
 
-		$commandUpdateHelp = <<<COMMAND_UPDATE_HELP
+        $commandUpdateHelp = <<<COMMAND_UPDATE_HELP
 
 Updating the PrestoPHP CLI
 -----------------------------------
@@ -53,27 +57,31 @@ CLI</info> version, execute the following command
 
 COMMAND_UPDATE_HELP;
 
-		$commandHelp .= $commandUpdateHelp;
+        $commandHelp .= $commandUpdateHelp;
 
-		$output->writeln(sprintf($commandHelp,
-			$this->appVersion,
-			str_repeat('=', 23 + strlen($this->appVersion)),
-			$this->getExecutableInfo()
-		));
+        $output->writeln(
+            sprintf(
+                $commandHelp,
+                $this->appVersion,
+                str_repeat('=', 23 + strlen($this->appVersion)),
+                $this->getExecutableInfo()
+            )
+        );
 
-	}
+    }
 
-	private function getExecutableInfo() {
-		$pathDirs = explode(PATH_SEPARATOR, $_SERVER['PATH']);
-		$executable = $_SERVER['PHP_SELF'];
-		$executableDir = dirname($executable);
+    private function getExecutableInfo()
+    {
+        $pathDirs = explode(PATH_SEPARATOR, $_SERVER['PATH']);
+        $executable = $_SERVER['PHP_SELF'];
+        $executableDir = dirname($executable);
 
-		if (in_array($executableDir, $pathDirs)) {
-			$executable = basename($executable);
-		}
+        if (in_array($executableDir, $pathDirs)) {
+            $executable = basename($executable);
+        }
 
-		return $executable;
-	}
+        return $executable;
+    }
 
 
 }

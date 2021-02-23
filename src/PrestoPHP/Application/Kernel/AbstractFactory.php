@@ -11,10 +11,12 @@ namespace PrestoPHP\Framework\Application\Kernel;
 
 use PrestoPHP\Framework\Application;
 
-abstract class AbstractFactory {
-    protected $application;
+abstract class AbstractFactory
+{
+    protected Application $application;
 
-    public function setApplication(Application $application) {
+    public function setApplication(Application $application)
+    {
         $this->application = $application;
     }
 }

@@ -9,6 +9,4 @@
  */
 namespace PrestoPHP\Framework\Application\Kernel;
 
-class Container extends \Pimple\Container {
-
-}
+class Container extends \Pimple\Container {}

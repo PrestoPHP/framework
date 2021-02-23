@@ -10,6 +10,8 @@
 namespace PrestoPHP\Framework;
 
 use PrestoPHP\Application as BaseApplication;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class Application extends BaseApplication
 {
@@ -20,14 +22,14 @@ class Application extends BaseApplication
         return self::VERSION;
     }
 
-	/**
-	 * @param $type
-	 * @param null $data
-	 * @param array $options
-	 * @return FormBuilderInterface
-	 */
-	public function buildForm($type = FormType::class, $data = null, $options = []) {
-		return $this['form.factory']->createBuilder($type, $data, $options);
-	}
-
+    /**
+     * @param  $type
+     * @param  null  $data
+     * @param  array $options
+     * @return FormBuilderInterface
+     */
+    public function buildForm($type = FormType::class, $data = null, $options = []): FormBuilderInterface
+    {
+        return $this['form.factory']->createBuilder($type, $data, $options);
+    }
 }

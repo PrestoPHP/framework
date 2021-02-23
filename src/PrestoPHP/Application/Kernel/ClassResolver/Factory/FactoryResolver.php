@@ -10,11 +10,12 @@
 
 namespace PrestoPHP\Framework\Application\Kernel\ClassResolver\Factory;
 
-class FactoryResolver extends AbstractFactoryResolver {
+class FactoryResolver extends AbstractFactoryResolver
+{
     const CLASS_NAME_PATTERN = '%s\\Code\\%s\\%s\\%sFactory';
 
-    public function getClassNamePattern() {
+    public function getClassNamePattern()
+    {
         return self::CLASS_NAME_PATTERN;
     }
-
 }
