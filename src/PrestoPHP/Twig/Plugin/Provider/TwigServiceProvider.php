@@ -14,7 +14,7 @@ use PrestoPHP\Api\BootableProviderInterface;
 use PrestoPHP\Application;
 use PrestoPHP\Provider\TwigServiceProvider as PrestoPHPTwigServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class TwigServiceProvider extends PrestoPHPTwigServiceProvider implements BootableProviderInterface {
@@ -29,7 +29,7 @@ class TwigServiceProvider extends PrestoPHPTwigServiceProvider implements Bootab
 		parent::register($app);
 	}
 
-	public function onKernelView(GetResponseForControllerResultEvent $event) {
+	public function onKernelView(ViewEvent $event) {
 		$response = $event->getControllerResult();
 		if(is_array($response) || empty($response)) {
 			$response = $this->render((array) $response);
