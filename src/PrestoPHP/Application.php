@@ -15,7 +15,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class Application extends BaseApplication
 {
-    const VERSION = '0.0.2';
+    const VERSION = '0.0.3-DEV';
 
     public static function getVersion()
     {
