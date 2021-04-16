@@ -54,7 +54,7 @@ abstract class DownloadCommand extends AbstractCommand
 
     protected function download()
     {
-        $this->output->writeln(sprintf("\n Downloading InnoCommerce Framework...\n"));
+        $this->output->writeln(sprintf("\n Downloading PrestoPHP Framework...\n"));
         $distill = new Distill();
         $icArchiveFile = $distill
             ->getChooser()
@@ -100,7 +100,7 @@ abstract class DownloadCommand extends AbstractCommand
 
         $client = $this->getGuzzleClient();
 
-        $this->downloadedFilePath = rtrim(getcwd(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '.' . uniqid(time()) . DIRECTORY_SEPARATOR . 'innocommerce.' . pathinfo($icArchiveFile, PATHINFO_EXTENSION);
+        $this->downloadedFilePath = rtrim(getcwd(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '.' . uniqid(time()) . DIRECTORY_SEPARATOR . 'PrestoPHP.' . pathinfo($icArchiveFile, PATHINFO_EXTENSION);
 
         try {
             $request = $client->createRequest('GET', $icArchiveFile);
@@ -121,7 +121,7 @@ abstract class DownloadCommand extends AbstractCommand
             } else {
                 throw new \RuntimeException(
                     sprintf(
-                        "There was an error downloading InnoCommerce Framework:\n%s",
+                        "There was an error downloading PrestoPHP Framework:\n%s",
                         $e->getMessage()
                     ), null, $e
                 );
@@ -146,7 +146,7 @@ abstract class DownloadCommand extends AbstractCommand
         if (!$this->isInstallerUpToDate()) {
             $this->output->writeln(
                 sprintf(
-                    "\n <error>WARNING</error> Your InnoCommerce Installer version (%s) is outdated. \n" .
+                    "\n <error>WARNING</error> Your PrestoPHP Installer version (%s) is outdated. \n" .
                     " Execute the command \"%s selfupdate\" to get the latest version (%s). ",
                     $this->localVersion, $_SERVER['PHP_SELF'], $this->latestVersion
                 )
@@ -202,21 +202,21 @@ abstract class DownloadCommand extends AbstractCommand
         } catch (FileCorruptedException $e) {
             throw new \RuntimeException(
                 sprintf(
-                    "InnoCommerce can't be installed because the downloaded package is corrupted.\n" .
+                    "PrestoPHP can't be installed because the downloaded package is corrupted.\n" .
                     "To solve this issue, try executing the command again:\n"
                 )
             );
         } catch (FileEmptyException $e) {
             throw new \RuntimeException(
                 sprintf(
-                    "InnoCommerce can't be installed because the downloaded package is empty.\n" .
+                    "PrestoPHP can't be installed because the downloaded package is empty.\n" .
                     "To solve this issue, try executing the command again:\n"
                 )
             );
         } catch (TargetDirectoryNotWritableException $e) {
             throw new \RuntimeException(
                 sprintf(
-                    "InnoCommerce can't be installed because the Installer doesn't have enough.\n" .
+                    "PrestoPHP can't be installed because the Installer doesn't have enough.\n" .
                     "permissions to uncompress and rename the package contents.\n" .
                     "To solve this issue, check the permissions and try executing the command again:\n"
                 )
@@ -224,7 +224,7 @@ abstract class DownloadCommand extends AbstractCommand
         } catch (\Exception $e) {
             throw new \RuntimeException(
                 sprintf(
-                    "InnoCommerce can't be installed because the an error occured.\n" .
+                    "PrestoPHP can't be installed because the an error occured.\n" .
                     "Please check permissions. Original error message was:\n\n%s", $e->getMessage()
                 ), null, $e
             );
@@ -233,7 +233,7 @@ abstract class DownloadCommand extends AbstractCommand
         if (!$extractionSucceeded) {
             throw new \RuntimeException(
                 sprintf(
-                    "InnoCommerce can't be installed because the downloaded package is corrupted\n" .
+                    "PrestoPHP can't be installed because the downloaded package is corrupted\n" .
                     "or because the uncompress commands of your operating system didn't work\n"
                 )
             );
@@ -265,7 +265,7 @@ abstract class DownloadCommand extends AbstractCommand
         try {
             $handler = Utils::getDefaultHandler();
         } catch (\RuntimeException $e) {
-            throw new \RuntimeException("The InnoCommerce installer requires the php-curl extension or the allow_url_fopen ini setting to be turned on");
+            throw new \RuntimeException("The PrestoPHP installer requires the php-curl extension or the allow_url_fopen ini setting to be turned on");
         }
 
         return new Client(['defaults' => $defaults, 'handler' => $handler]);

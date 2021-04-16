@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Application extends ConsoleApplication
 {
     const VERSION = "0.1.0";
-    const VERSION_URL = "http://version.prestophp.com";
+    const VERSION_URL = "https://version.prestophp.com";
 
     public function doRun(InputInterface $input, OutputInterface $output)
     {

@@ -22,9 +22,9 @@ class NewCommand extends DownloadCommand
     protected function configure()
     {
         $this->setName("new")
-            ->setDescription("Creates a new InnoCommerce project.")
+            ->setDescription("Creates a new PrestoPHP project.")
             ->addArgument("directory", InputArgument::REQUIRED, "Directory where the new project will be created.")
-            ->addArgument("version", InputArgument::OPTIONAL, "The InnoCommerce version to be installed (default is 'latest')");
+            ->addArgument("version", InputArgument::OPTIONAL, "The PrestoPHP version to be installed (default is 'latest')");
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
@@ -89,7 +89,7 @@ class NewCommand extends DownloadCommand
 
     protected function dumpReadmeFile()
     {
-        $readmeContents = sprintf("%s\n%s\n\nAn InnoCommerce eCommerce project created on %s.\n", $this->projectName, str_repeat('=', strlen($this->projectName)), date('F j, Y, g:i a'));
+        $readmeContents = sprintf("%s\n%s\n\nAn PrestoPHP project created on %s.\n", $this->projectName, str_repeat('=', strlen($this->projectName)), date('F j, Y, g:i a'));
         try {
             $this->fs->dumpFile($this->projectDir . '/README.md', $readmeContents);
         } catch (\Exception $exception) {
@@ -117,7 +117,7 @@ class NewCommand extends DownloadCommand
     {
         $this->output->writeln(
             sprintf(
-                "<info>InnoCommerce eCommerce Framework %s was successfully installed</info>\n",
+                "<info>PrestoPHP Framework %s was successfully installed</info>\n",
                 $this->latestVersion
             )
         );
@@ -126,7 +126,7 @@ class NewCommand extends DownloadCommand
     protected function getRemoteFileUrl()
     {
         $version = $this->version == "latest" ? $this->latestVersion : $this->version;
-        return "http://get.innocommerce.io/innocommerce-{$version}";
+        return "https://get.prestophp.com/prestophp-{$version}";
     }
 
 }
